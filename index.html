@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regras do Grupo - Vittace Sabará</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        header {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0066cc;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0066cc, #0052a3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .welcome-section h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .welcome-section p {
+            margin-bottom: 16px;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border-left: 4px solid #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .card.critical {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .card.high {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .severity-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .severity-high {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .card-description {
+            color: #555;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .card-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card-list li {
+            padding-left: 24px;
+            margin-bottom: 12px;
+            position: relative;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .card-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .consequences-list {
+            list-style: none;
+            padding-left: 0;
+            border-left: 4px solid #dc2626;
+            padding-left: 24px;
+        }
+
+        .consequences-list li {
+            margin-bottom: 24px;
+            padding-left: 0;
+        }
+
+        .consequences-list li::before {
+            content: '';
+        }
+
+        .consequence-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: #dc2626;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .consequence-item {
+            display: inline-block;
+            vertical-align: top;
+            width: calc(100% - 50px);
+        }
+
+        .consequence-title {
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .consequence-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .important-box {
+            background: #eff6ff;
+            border-left: 4px solid #0066cc;
+            padding: 24px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .important-box h4 {
+            color: #0066cc;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .important-box p {
+            color: #333;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: #0066cc;
+            color: white;
+            padding: 40px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 30px;
+            padding-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .back-to-top {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .back-to-top:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            main {
+                padding: 20px 16px;
+            }
+
+            header {
+                padding: 16px 20px;
+            }
+        }
+
+        .toc {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .toc h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .toc ul {
+            list-style: none;
+            columns: 2;
+            gap: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 12px;
+        }
+
+        .toc a {
+            color: #0066cc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #0052a3;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">W</div>
+                <span>Regras WhatsApp</span>
+            </div>
+            <div class="header-title">
+                <h1>Vittace Sabará Moradores</h1>
+                <p>Regras do grupo </p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <div class="hero-content">
+                <h2>Regras do Grupo Sabará</h2>
+                <p>Conheça as regras oficiais do nosso grupos de WhatsApp</p>
+            </div>
+        </div>
+
+        <!-- Índice -->
+        <div class="toc">
+            <h3>📑 Índice de Conteúdo</h3>
+            <ul>
+                <li><a href="#introducao">Introdução</a></li>
+                <li><a href="#conteudo-ilegal">Conteúdo Ilegal</a></li>
+                <li><a href="#discurso-odio">Discurso de Ódio</a></li>
+                <li><a href="#spam-fraudes">Spam e Fraudes</a></li>
+                <li><a href="#consequencias">Consequências</a></li>
+            </ul>
+        </div>
+
+        <!-- Seção 1: Introdução -->
+        <section class="section" id="introducao">
+            <h2 class="section-title">Introdução</h2>
+            
+            <div class="welcome-section">
+                <h3>Bem-vindo</h3>
+                <p> Todos são bem vindos, desde que sigam as regras do grupo.</p>
+                <p>As regras a seguir detalham os tipos de conteúdo e comportamento estritamente proibidos, com base nas políticas oficiais do WhatsApp, aplicáveis a conversas individuais, ligações, grupos, comunidades e atualizações de status.</p>
+            </div>
+
+            <div class="welcome-section">
+                <h3>Sobre</h3>
+                <p>O foco é mantermos as regras de conduta, prevenção de spam, discurso de ódio e conteúdo ilegal.
+
+ <p> Duvidas entrar em contato com os administradores do grupo.</p>
+            </div>
+        </section>
+
+        <!-- Seção 2: Conteúdo Ilegal -->
+        <section class="section" id="conteudo-ilegal">
+            <h2 class="section-title">Proibido: Conteúdo e Atividades Ilegais</h2>
+            <p class="section-subtitle">É proibido compartilhar qualquer conteúdo ou se envolver em atividades que violem a legislação local ou internacional.</p>
+
+            <div class="card critical">
+                <div class="card-header">
+                    <div class="card-icon">⛔</div>
+                    <div class="card-title">Material de Abuso Sexual Infantil (CSAM)</div>
+                    <span class="severity-badge severity-critical">Crítico</span>
+                </div>
+                <p class="card-description">Conteúdo que explore sexualmente ou ponha em risco crianças é estritamente proibido.</p>
+                <ul class="card-list">
+                    <li>Compartilhamento de material de abuso sexual infantil</li>
+                    <li>Conteúdo que explore sexualmente menores</li>
+                    <li>Qualquer material que coloque crianças em risco</li>
+                    <li>Denúncia automática às autoridades competentes (NCMEC)</li>
+                </ul>
+            </div>
+
+            <div class="card high">
+                <div class="card-header">
+                    <div class="card-icon">©️</div>
+                    <div class="card-title">Propriedade Intelectual</div>
+                    <span class="severity-badge severity-high">Alto</span>
+                </div>
+                <p class="card-description">Não compartilhe conteúdo protegido por direitos autorais ou marcas registradas sem autorização.</p>
+                <ul class="card-list">
+                    <li>Violação de direitos autorais</li>
+                    <li>Uso não autorizado de marcas registradas</li>
+                    <li>Compartilhamento de conteúdo licenciado sem permissão</li>
+                </ul>
+            </div>
+
+            <div class="card critical">
+                <div class="card-header">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Crimes Violentos e Tráfico</div>
+                    <span class="severity-badge severity-critical">Crítico</span>
+                </div>
+                <p class="card-description">Não organize ou coordene atividades criminosas na plataforma.</p>
+                <ul class="card-list">
+                    <li>Organização de crimes violentos</li>
+                    <li>Violência contra terceiros</li>
+                    <li>Tráfico de pessoas</li>
+                    <li>Comércio de drogas ilícitas</li>
+                    <li>Apoio a organizações terroristas</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Seção 3: Proibido: Discurso de Ódio -->
+        <section class="section" id="discurso-odio">
+            <h2 class="section-title"> Proibido: Discurso de Ódio, Discriminação e Assédio</h2>
+            <p class="section-subtitle">O WhatsApp proíbe estritamente o discurso de ódio e qualquer forma de discriminação ou assédio.</p>
+
+            <div class="card critical">
+                <div class="card-header">
+                    <div class="card-icon">⛔</div>
+                    <div class="card-title">Discurso de Ódio</div>
+                    <span class="severity-badge severity-critical">Crítico</span>
+                </div>
+                <p class="card-description">Mensagens que atacam ou incitam violência contra grupos protegidos são proibidas.</p>
+                <ul class="card-list">
+                    <li>Ataques baseados em raça ou etnia</li>
+                    <li>Discriminação por orientação sexual (homofobia)</li>
+                    <li>Discriminação por identidade de gênero</li>
+                    <li>Ataques baseados em religião</li>
+                    <li>Discriminação por deficiência, idade ou condição médica</li>
+                    <li>Incitação à violência ou desumanização</li>
+                </ul>
+            </div>
+
+            <div class="card critical">
+                <div class="card-header">
+                    <div class="card-icon">🚫</div>
+                    <div class="card-title">Racismo e Xenofobia</div>
+                    <span class="severity-badge severity-critical">Crítico</span>
+                </div>
+                <p class="card-description">Conteúdo que promova superioridade racial ou ódio contra outras nacionalidades.</p>
+                <ul class="card-list">
+                    <li>Promoção de superioridade racial ou étnica</li>
+                    <li>Ódio contra pessoas de outras nacionalidades</li>
+                    <li>Preconceito contra origens específicas</li>
+                    <li>Estereótipos prejudiciais e desumanizadores</li>
+                </ul>
+            </div>
+
+            <div class="card high">
+                <div class="card-header">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Assédio e Ameaças</div>
+                    <span class="severity-badge severity-high">Alto</span>
+                </div>
+                <p class="card-description">Não envie ameaças, assédio persistente ou conteúdo que vise intimidar.</p>
+                <ul class="card-list">
+                    <li>Ameaças de violência</li>
+                    <li>Assédio persistente ou bullying</li>
+                    <li>Difamação ou calúnia</li>
+                    <li>Exposição de informações privadas (doxing)</li>
+                    <li>Intimidação ou envergonhamento proposital</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Seção 4:Proibido:  Spam e Fraudes -->
+        <section class="section" id="spam-fraudes">
+            <h2 class="section-title">Proibido: Spam, Fraudes e Comportamento Controverso</h2>
+            <p class="section-subtitle">Comportamentos que prejudicam a integridade da plataforma ou a experiência do usuário são proibidos.</p>
+
+            <div class="card high">
+                <div class="card-header">
+                    <div class="card-icon">📨</div>
+                    <div class="card-title">Spam e Mensagens em Massa</div>
+                    <span class="severity-badge severity-high">Alto</span>
+                </div>
+                <p class="card-description">Contatos repetidos e indesejados, envio de mensagens em massa e automáticas são proibidos.</p>
+                <ul class="card-list">
+                    <li>Contatos repetidos e indesejados com usuários</li>
+                    <li>Envio de mensagens em massa e automáticas</li>
+                    <li>Uso de discagem automática</li>
+                    <li>Uso de clientes não oficiais para automação</li>
+                    <li>Automação para prejudicar o WhatsApp ou usuários</li>
+                </ul>
+            </div>
+
+            <div class="card high">
+                <div class="card-header">
+                    <div class="card-icon">🔓</div>
+                    <div class="card-title">Fraudes e Falsificação</div>
+                    <span class="severity-badge severity-high">Alto</span>
+                </div>
+                <p class="card-description">Atividades que enganem ou fraudem usuários são estritamente proibidas.</p>
+                <ul class="card-list">
+                    <li>Phishing e falsificação de identidade</li>
+                    <li>Manipulação de identidade proposital</li>
+                    <li>Fraude de usuários do WhatsApp</li>
+                    <li>Enganaçao através de falsificação</li>
+                </ul>
+            </div>
+
+            <div class="card high">
+                <div class="card-header">
+                    <div class="card-icon">💻</div>
+                    <div class="card-title">Danos ao Sistema</div>
+                    <span class="severity-badge severity-high">Alto</span>
+                </div>
+                <p class="card-description">Esforços para danificar a integridade do WhatsApp são proibidos.</p>
+                <ul class="card-list">
+                    <li>Tentativas de danificar sistemas de integridade</li>
+                    <li>Abuso de ferramentas de denúncia</li>
+                    <li>Comprometimento de contas de usuários</li>
+                    <li>Coleta indevida de dados</li>
+                    <li>Uso de ferramentas não autorizadas</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Seção 5: Consequências -->
+        <section class="section" id="consequencias">
+            <h2 class="section-title">Consequências por Violação das Regras</h2>
+            <p class="section-subtitle">O WhatsApp pode tomar medidas contra contas que violem estas Diretrizes, com base nas informações disponíveis (informações de conta, grupo, perfil de comunidade e mensagens denunciadas).</p>
+
+            <div class="card critical">
+                <div class="card-header">
+                    <div class="card-icon">⚖️</div>
+                    <div class="card-title">Medidas que o WhatsApp Pode Tomar</div>
+                </div>
+                <ol class="consequences-list">
+                    <li>
+                        <span class="consequence-number">1</span>
+                        <div class="consequence-item">
+                            <div class="consequence-title">Alerta</div>
+                            <div class="consequence-description">Alertar os usuários sobre violações destas Diretrizes</div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="consequence-number">2</span>
+                        <div class="consequence-item">
+                            <div class="consequence-title">Suspensão Temporária</div>
+                            <div class="consequence-description">Suspender temporariamente uma conta no serviço</div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="consequence-number">3</span>
+                        <div class="consequence-item">
+                            <div class="consequence-title">Suspensão Permanente</div>
+                            <div class="consequence-description">Suspender permanentemente uma conta no serviço</div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="consequence-number">4</span>
+                        <div class="consequence-item">
+                            <div class="consequence-title">Restrição de Grupos</div>
+                            <div class="consequence-description">Impedir novas atividades em grupos e/ou comunidades</div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="consequence-number">5</span>
+                        <div class="consequence-item">
+                            <div class="consequence-title">Remoção de Dados</div>
+                            <div class="consequence-description">Remover informações de perfis de contas ou grupos em violação dos servidores</div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="consequence-number">6</span>
+                        <div class="consequence-item">
+                            <div class="consequence-title">Bloqueio de Convites</div>
+                            <div class="consequence-description">Revogar ou bloquear o uso do link de convite de um grupo ou comunidade</div>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="consequence-number">7</span>
+                        <div class="consequence-item">
+                            <div class="consequence-title">Denúncia às Autoridades</div>
+                            <div class="consequence-description">Denunciar material de abuso sexual infantil ao NCMEC e autoridades competentes</div>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="important-box">
+                    <h4>⚠️ Importante</h4>
+                    <p>O WhatsApp utiliza técnicas de processamento automatizado e equipes de análise humana para detectar e analisar violações. As mensagens pessoais são sempre protegidas com criptografia de ponta a ponta, mesmo durante investigações de violações.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Sobre</h4>
+                <p>Este site apresenta as Diretrizes de Mensagens oficiais do WhatsApp, com foco em regras de conduta, prevenção de spam, discurso de ódio e conteúdo ilegal.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Links Úteis</h4>
+                <ul>
+                    <li><a href="https://www.whatsapp.com/legal/updates/message-guidelines" target="_blank">Diretrizes Oficiais</a></li>
+                    <li><a href="https://www.whatsapp.com/legal/terms-of-service" target="_blank">Termos de Serviço</a></li>
+                    <li><a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank">Política de Privacidade</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Informações</h4>
+                <p><strong>Última atualização:</strong> 15 de Dezembro de 2025</p>
+                <p><strong>Baseado em:</strong> Diretrizes Oficiais do WhatsApp</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Regras de Uso do WhatsApp. Todos os direitos reservados.</p>
+            <p>Este site é um recurso educacional independente.</p>
+            <a href="#" class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">↑ Voltar ao Topo</a>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mostrar/esconder botão "Voltar ao Topo"
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.style.display = 'inline-block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
