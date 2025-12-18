@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Monitor de Normas Regulamentadoras – FRISIA</title>
+<style>
+body {font-family: Arial, Helvetica, sans-serif; background:#F7F7F7; margin:0;}
+.header {position:sticky; top:0; z-index:3000; background:#0059A4; color:#FFF; padding:6px 16px;}
+.header h1 {margin:0; font-size:20px; text-align:center;}
+.subtitle {text-align:center; font-size:12px; color:#E6EEF6; margin-top:2px;}
+.progress {margin-top:4px;}
+.progress-text {font-size:12px; text-align:center; margin-bottom:2px;}
+.bar-bg {width:100%; height:16px; background:#003E7E; border-radius:8px;}
+.bar {height:16px; width:0%; background:#8CC63F; transition:width .2s;}
+.container {padding:20px; padding-top:60px;}
+table {width:100%; border-collapse:collapse; background:#FFF;}
+thead {position:sticky; top:92px; z-index:2000;}
+thead th {background:#8CC63F;}
+th,td {border:1px solid #DDD; padding:8px; background:#FFF;}
+.badge-ok {background:#8CC63F; color:#1C1C1C; padding:3px 6px; border-radius:4px; font-size:12px;}
+.badge-alerta {background:#D6001C; color:#FFF; padding:3px 6px; border-radius:4px; font-size:12px;}
+.badge-falha {background:#9E9E9E; color:#FFF; padding:3px 6px; border-radius:4px; font-size:12px;}
+.badge-futuro {background:#FF9800; color:#1C1C1C; padding:3px 6px; border-radius:4px; font-size:12px;}
+.center {text-align:center;}
+.refresh-btn {background:#0059A4; color:#FFF; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>MONITOR DE NORMAS REGULAMENTADORAS - FRISIA</h1>
+  <div class="subtitle">Status de atualização (últimos 30 dias) + notificação</div>
+  <div class="progress">
+    <div class="progress-text" id="pt">Carregadas: 0 / 38</div>
+    <div class="bar-bg"><div class="bar" id="bar"></div></div>
+  </div>
+</div>
+
+<div class="container">
+<table>
+<thead>
+<tr>
+<th>NR</th>
+<th>Nome da NR</th>
+<th>Publicado em</th>
+<th>Atualizado em</th>
+<th>Status</th>
+<th>Notificar</th>
+<th>Ação</th>
+<th>Acesso</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<script>
+const TOTAL = 38;
+let carregadas = 0;
+const TIMEOUT = 8000;
+const falhas = new Set();
+const emailDestino = "leandro.rolao@frisia.coop.br";
+
+const baseUrl = "https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/participacao-social/conselhos-e-orgaos-colegiados/comissao-tripartite-partitaria-permanente/normas-regulamentadora/normas-regulamentadoras-vigentes/";
+const proxy = "https://api.allorigins.win/raw?url=";
+
+const nomesNR = {
+1:"DISPOSIÇÕES GERAIS E GERENCIAMENTO DE RISCOS OCUPACIONAIS",
+2:"INSPEÇÃO PRÉVIA (REVOGADA)",
+3:"EMBARGO E INTERDIÇÃO",
+4:"SESMT",5:"CIPA",6:"EPI",7:"PCMSO",8:"EDIFICAÇÕES",9:"AGENTES",
+10:"ELETRICIDADE",11:"TRANSPORTE",12:"MÁQUINAS",13:"CALDEIRAS",
+14:"FORNOS",15:"INSALUBRES",16:"PERIGOSAS",17:"ERGONOMIA",
+18:"CONSTRUÇÃO",19:"EXPLOSIVOS",20:"INFLAMÁVEIS",21:"CÉU ABERTO",
+22:"MINERAÇÃO",23:"INCÊNDIOS",24:"CONFORTO",25:"RESÍDUOS",
+26:"SINALIZAÇÃO",27:"REGISTRO",28:"FISCALIZAÇÃO",29:"PORTUÁRIO",
+30:"AQUAVIÁRIO",31:"AGRICULTURA",32:"SAÚDE",33:"CONFINADOS",
+34:"NAVAL",35:"ALTURA",36:"ABATE",37:"PLATAFORMAS",38:"LIMPEZA"
+};
+
+function atualizarBarra(){
+  carregadas++;
+  document.getElementById("pt").innerText = `Carregadas: ${carregadas} / ${TOTAL}`;
+  document.getElementById("bar").style.width = (carregadas/TOTAL*100)+"%";
+}
+
+function parseDataBR(txt){
+  const m = txt.match(/(\d{2})\/(\d{2})\/(\d{4})\s*(\d{2})h(\d{2})/);
+  if(!m) return null;
+  return new Date(m[3], m[2]-1, m[1], m[4], m[5]);
+}
+
+function calcularStatus(att){
+  if(!att) return '<span class="badge-ok">Sem atualização</span>';
+  const dataAtt = parseDataBR(att);
+  if(!dataAtt) return '<span class="badge-ok">Sem atualização</span>';
+  const hoje = new Date();
+  const diff = (hoje - dataAtt) / (1000*60*60*24);
+  if(diff < 0) return '<span class="badge-futuro">Data futura</span>';
+  if(diff <= 30) return '<span class="badge-alerta">Atualizada &lt; 30 dias</span>';
+  return '<span class="badge-ok">Atualizada</span>';
+}
+
+function enviarEmail(nr,nome,pub,att,status,link){
+  const assunto = `Alerta NR ${nr}`;
+  const corpo = `NR: ${nr}
+Nome: ${nome}
+Publicado em: ${pub}
+Atualizado em: ${att}
+Status: ${status}
+
+Link:
+${link}
+
+Mensagem automática do Monitor FRISIA.`;
+  window.location.href =
+    `mailto:${emailDestino}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+}
+
+function fetchComTimeout(url){
+  return Promise.race([
+    fetch(proxy+encodeURIComponent(url)),
+    new Promise((_, reject)=>setTimeout(()=>reject("timeout"), TIMEOUT))
+  ]);
+}
+
+function extrairDatas(html){
+  const doc = new DOMParser().parseFromString(html,"text/html");
+  const by = doc.querySelector('[id*="plone-document-byline"]');
+  if(!by) return {};
+  const txt = by.innerText.replace(/\s+/g," ");
+  const pub = (txt.match(/Publicado em\s*(\d{2}\/\d{2}\/\d{4}\s*\d{2}h\d{2})/)||[])[1];
+  const att = (txt.match(/Atualizado em\s*(\d{2}\/\d{2}\/\d{4}\s*\d{2}h\d{2})/)||[])[1];
+  return {pub, att};
+}
+
+function criarLinha(n){
+  const nr = `NR-${n}`;
+  const url = n===1 ? baseUrl+"nr-1" : baseUrl+`norma-regulamentadora-no-${n}-nr-${n}`;
+  const tr = document.createElement("tr");
+  tr.setAttribute("data-nr", n);
+  tr.innerHTML = `
+    <td>${nr}</td>
+    <td>${nomesNR[n]}</td>
+    <td>-</td>
+    <td>-</td>
+    <td><span class="badge-falha">Carregando</span></td>
+    <td class="center"><input type="checkbox"></td>
+    <td class="center"><button class="refresh-btn" onclick="reprocessar(${n})">↻</button></td>
+    <td class="center"><a href="${url}" target="_blank">🔗</a></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+async function carregarNR(n){
+  const tr = document.querySelector(`tr[data-nr='${n}']`);
+  const url = n===1 ? baseUrl+"nr-1" : baseUrl+`norma-regulamentadora-no-${n}-nr-${n}`;
+  try{
+    const r = await fetchComTimeout(url);
+    const html = await r.text();
+    const d = extrairDatas(html);
+    tr.children[2].innerText = d.pub || "-";
+    tr.children[3].innerText = d.att || "-";
+    tr.children[4].innerHTML = calcularStatus(d.att);
+    tr.children[5].innerHTML =
+      `<input type="checkbox" onclick="enviarEmail('${'NR-'+n}','${nomesNR[n]}','${d.pub||''}','${d.att||''}','${tr.children[4].innerText}','${url}')">`;
+    falhas.delete(n);
+  }catch{
+    falhas.add(n);
+    tr.children[4].innerHTML = '<span class="badge-falha">Falha</span>';
+  }finally{
+    atualizarBarra();
+  }
+}
+
+function reprocessar(n){
+  falhas.add(n);
+  retryFalhas();
+}
+
+async function retryFalhas(){
+  for(const n of falhas){
+    await carregarNR(n);
+  }
+}
+
+for(let i=1;i<=TOTAL;i++){
+  criarLinha(i);
+  carregarNR(i);
+}
+
+setTimeout(retryFalhas,15000);
+</script>
+
+</body>
+</html>
